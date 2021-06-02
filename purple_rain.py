@@ -25,6 +25,8 @@ class Drop:
                 self.x = r.random()*scr_width
                 self.y = r.random()*200-300
                 self.yspeed = r.random()*3+4
+                self.thic = r.choice([1,2,3])
+                self.len = r.random()*20 + 10
                 
         def fall(self):
                 self.y += self.yspeed
@@ -35,34 +37,41 @@ class Drop:
                         self.yspeed = r.random()*3+4
                 
         def show(self):
-                pygame.draw.line(screen, (138,43,226), (self.x,self.y), (self.x,self.y + r.random()*10+10),r.choice([1,2]))
+                line = pygame.Surface((self.thic,self.len),pygame.SRCALPHA)
+                line.fill((138,43,226,r.random()*200+55))
+                screen.blit(line,(self.x,self.y))
                 
                 
-#######################################################                
+#######################################################     
 
 def setup():
         global screen
         global text, textRect
         screen = pygame.display.set_mode((scr_width,scr_height))
+        screen.fill((230,230,250,0))
+        
+        
         for i in range(500) :
                 d.append(Drop())
         
         # For Text        
         font = pygame.font.Font('freesansbold.ttf', 20)
-        text = font.render('PURPLE RAIN', True, (138,43,226), (230,230,250))
+        text = font.render('PURPLE RAIN', True, (138,43,226,0), (230,230,250))#(230,230,250)
         textRect = text.get_rect()
         textRect.center = (scr_width // 2,scr_height // 2)
         
 def draw():
-        screen.fill((230,230,250))
-        
+        surf = pygame.Surface((scr_width,scr_height),pygame.SRCALPHA)
+        surf.fill((230,230,250))
+        screen.blit(surf,(0,0))
         #For text
         screen.blit(text, textRect)
  
         for i in range (len(d)):
                 d[i].fall()
                 d[i].show() 
-       
+                
+        
         pygame.display.flip()
         
 ############################       
